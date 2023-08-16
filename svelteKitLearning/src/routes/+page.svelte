@@ -80,17 +80,13 @@
 
 <script>
 	let m = { x: 0, y: 0 };
-
-	/**
-	 * @param {{ clientX: number; clientY: number; }} event
-	 */
-	function handleMove(event) {
-		m.x = event.clientX;
-		m.y = event.clientY;
-	}
 </script>
 
-<div on:pointermove={handleMove}>
+<div
+	on:pointermove={(e) => {
+		m = { x: e.clientX, y: e.clientY };
+	}}
+>
 	The pointer is at {m.x} x {m.y}
 </div>
 
