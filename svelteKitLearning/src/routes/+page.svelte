@@ -1,5 +1,11 @@
 <script>
-	const colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'];
+	const colors = [
+  "#FF5733", "#FFC300", "#C70039", "#900C3F", "#581845", "#FF1E56", "#FF931E", "#FFCC29", "#FF3838", "#1B9CFC",
+  "#60A3BC", "#55E6C1", "#CAD3C8", "#EAECEE", "#8A8A8A", "#6D214F", "#182C61", "#D6A2E8", "#6D214F", "#182C61",
+  "#1B9CFC", "#60A3BC", "#55E6C1", "#CAD3C8", "#EAECEE", "#8A8A8A", "#FFC300", "#C70039", "#900C3F", "#581845",
+  "#FF1E56", "#FF931E", "#FFCC29", "#FF3838", "#1B9CFC", "#60A3BC", "#55E6C1", "#CAD3C8", "#EAECEE", "#8A8A8A",
+  "#6D214F", "#182C61", "#D6A2E8", "#6D214F", "#182C61", "#1B9CFC", "#60A3BC", "#55E6C1", "#CAD3C8", "#EAECEE"
+];
 	let selected = colors[0];
 </script>
 
@@ -20,16 +26,15 @@
 
 <style>
 	h1 {
-		transition: color 0.2s;
-		background-color: hsl(0, 0%, 18%);
+		transition: color 0.2s;	
+        text-align: center;
 	}
 
 	div {
 		display: grid;
-		grid-template-columns: repeat(7, 1fr);
-		grid-gap: 5px;
-		max-width: 400px;
-		background-color: hsl(0, 0%, 18%);
+		grid-template-columns: repeat(10, 1fr);
+		grid-gap: 5px;        
+		max-width: 800px;	        
 	}
 
 	button {
