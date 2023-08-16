@@ -1,4 +1,4 @@
-<script>
+<!-- <script>
 	const colors = [
   "#FF5733", "#FFC300", "#C70039", "#900C3F", "#581845", "#FF1E56", "#FF931E", "#FFCC29", "#FF3838", "#1B9CFC",
   "#60A3BC", "#55E6C1", "#CAD3C8", "#EAECEE", "#8A8A8A", "#6D214F", "#182C61", "#D6A2E8", "#6D214F", "#182C61",
@@ -54,7 +54,7 @@
 	}
 </style>
 
-<!-- <script>
+ <script>
 	import Thing from './Thing.svelte';
 
 	let things = [
@@ -76,4 +76,28 @@
 
 {#each things as thing (thing.id)}
 	<Thing name={thing.name} />
-{/each} -->
+{/each} --> 
+
+<script>
+	let m = { x: 0, y: 0 };
+
+	function handleMove(event) {
+		m.x = event.clientX;
+		m.y = event.clientY;
+	}
+</script>
+
+<div on:pointermove={handleMove}>
+	The pointer is at {m.x} x {m.y}
+</div>
+
+<style>
+	div {
+		position: fixed;
+		left: 0;
+		top: 0;
+		width: 100%;
+		height: 100%;
+		padding: 1rem;
+	}
+</style>
