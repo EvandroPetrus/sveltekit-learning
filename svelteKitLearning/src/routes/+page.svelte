@@ -78,7 +78,7 @@
 	<Thing name={thing.name} />
 {/each} --> 
 
-<script>
+<!-- <script>
 	let m = { x: 0, y: 0 };
 </script>
 
@@ -98,5 +98,321 @@
 		width: 100%;
 		height: 100%;
 		padding: 1rem;
+	}
+</style> -->
+
+<!-- <script>
+	let name = 'world';
+    let a = 1;
+	let b = 2;
+    let yes = false;
+    let questions = [
+		{
+			id: 1,
+			text: `Where did you go to school?`
+		},
+		{
+			id: 2,
+			text: `What is your mother's name?`
+		},
+		{
+			id: 3,
+			text: `What is another personal fact that an attacker could easily find with Google?`
+		}
+	];
+
+	/**
+	 * @type {{ id: any; text: any; }}
+	 */
+	let selectedForm;
+
+	let answer = '';
+
+	function handleSubmit() {
+		alert(
+			`answered question ${selectedForm.id} (${selectedForm.text}) with "${answer}"`
+		);
+	}
+</script>
+
+<input bind:value={name} />
+
+<h1>Hello {name}!</h1>
+
+<label>
+	<input type="number" bind:value={a} min="0" max="10" />
+	<input type="range" bind:value={a} min="0" max="10" />
+</label>
+
+<label>
+	<input type="number" bind:value={b} min="0" max="10" />
+	<input type="range" bind:value={b} min="0" max="10" />
+</label>
+
+<p>{a} + {b} = {a + b}</p>
+
+
+<label>
+	<input type="checkbox" bind:checked={yes} />
+	Yes! Send me regular email spam
+</label>
+
+{#if yes}
+	<p>
+		Thank you. We will bombard your inbox and sell
+		your personal details.
+	</p>
+{:else}
+	<p>
+		You must opt in to continue. If you're not
+		paying, you're the product.
+	</p>
+{/if}
+
+<button disabled={!yes}>Subscribe</button>
+
+<h2>Insecurity questions</h2>
+
+<form on:submit|preventDefault={handleSubmit}>
+	<select
+		bind:value={selectedForm}
+		on:change={() => (answer = '')}
+	>
+		{#each questions as question}
+			<option value={question}>
+				{question.text}
+			</option>
+		{/each}
+	</select>
+
+	<input bind:value={answer} />
+
+	<button disabled={!answer} type="submit">
+		Submit
+	</button>
+</form>
+
+<p>
+	selected question {selectedForm
+		? selectedForm.id
+		: '[waiting...]'}
+</p> -->
+
+<!-- <script>
+	let scoops = 1;
+	/**
+	 * @type {string | any[] | Iterable<string>}
+	 */
+	let flavours = [];
+
+	const formatter = new Intl.ListFormat('en', { style: 'long', type: 'conjunction' });
+</script>
+
+<h2>Size</h2>
+
+{#each [1, 2, 3] as number}
+	<label>
+		<input
+			type="radio"
+			name="scoops"
+			value={number}
+			bind:group={scoops}
+		/>
+
+		{number} {number === 1 ? 'scoop' : 'scoops'}
+	</label>
+{/each}
+
+<h2>Flavours</h2>
+
+<select multiple bind:value={flavours}>
+	{#each ['cookies and cream', 'mint choc chip', 'raspberry ripple'] as flavour}
+		<option>{flavour}</option>
+	{/each}
+</select>
+
+{#if flavours.length === 0}
+	<p>Please select at least one flavour</p>
+{:else if flavours.length > scoops}
+	<p>Can't order more flavours than scoops!</p>
+{:else}
+	<p>
+		You ordered {scoops} {scoops === 1 ? 'scoop' : 'scoops'}
+		of {formatter.format(flavours)}
+	</p>
+{/if} -->
+
+<script>
+	import Eliza from 'elizabot';
+	import {
+		beforeUpdate,
+		afterUpdate
+	} from 'svelte';
+
+	let div;
+	let autoscroll = false;
+
+	beforeUpdate(() => {
+		if (div) {
+			const scrollableDistance = div.scrollHeight - div.offsetHeight;
+			autoscroll = div.scrollTop > scrollableDistance - 20;
+		}
+	});
+
+	afterUpdate(() => {
+		if (autoscroll) {
+			div.scrollTo(0, div.scrollHeight);
+		}
+	});
+
+	const eliza = new Eliza();
+	const pause = (ms) => new Promise((fulfil) => setTimeout(fulfil, ms));
+
+	const typing = { author: 'eliza', text: '...' };
+
+	let comments = [];
+
+	async function handleKeydown(event) {
+		if (event.key === 'Enter' && event.target.value) {
+			const comment = {
+				author: 'user',
+				text: event.target.value
+			};
+
+			const reply = {
+				author: 'eliza',
+				text: eliza.transform(comment.text)
+			};
+
+			event.target.value = '';
+			comments = [...comments, comment];
+
+			await pause(200 * (1 + Math.random()));
+			comments = [...comments, typing];
+
+			await pause(500 * (1 + Math.random()));
+			comments = [...comments, reply].filter(comment => comment !== typing);
+		}
+	}
+</script>
+
+<div class="container">
+	<div class="phone">
+		<div class="chat" bind:this={div}>
+			<header>
+				<h1>Eliza</h1>
+
+				<article class="eliza">
+					<span>{eliza.getInitial()}</span>
+				</article>
+			</header>
+
+			{#each comments as comment}
+				<article class={comment.author}>
+					<span>{comment.text}</span>
+				</article>
+			{/each}
+		</div>
+
+		<input on:keydown={handleKeydown} />
+	</div>
+</div>
+
+<style>
+	.container {
+		display: grid;
+		place-items: center;
+		height: 100%;
+	}
+
+	.phone {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		height: 100%;
+	}
+
+	header {
+		display: flex;
+		flex-direction: column;
+		height: 100%;
+		padding: 4em 0 0 0;
+		box-sizing: border-box;
+	}
+
+	h1 {
+		flex: 1;
+		font-size: 1.4em;
+		text-align: center;
+	}
+
+	.chat {
+		height: 0;
+		flex: 1 1 auto;
+		padding: 0 1em;
+		overflow-y: auto;
+		scroll-behavior: smooth;
+	}
+
+	article {
+		margin: 0 0 0.5em 0;
+	}
+
+	.user {
+		text-align: right;
+	}
+
+	span {
+		padding: 0.5em 1em;
+		display: inline-block;
+	}
+
+	.eliza span {
+		background-color: var(--bg-1);
+		border-radius: 1em 1em 1em 0;
+		color: var(--fg-1);
+	}
+
+	.user span {
+		background-color: #0074d9;
+		color: white;
+		border-radius: 1em 1em 0 1em;
+		word-break: break-all;
+	}
+
+	input {
+		margin: 0.5em 1em 1em 1em;
+	}
+
+	@media (min-width: 400px) {
+		.phone {
+			background: var(--bg-2);
+			position: relative;
+			font-size: min(2.5vh, 1rem);
+			width: auto;
+			height: 36em;
+			aspect-ratio: 9 / 16;
+			border: 0.2em solid #222;
+			border-radius: 1em;
+			box-sizing: border-box;
+			filter: drop-shadow(1px 1px 0px #222) drop-shadow(2px 2px 0px #222) drop-shadow(3px 3px 0px #222)
+		}
+
+		.phone::after {
+			position: absolute;
+			content: '';
+			background: #222;
+			width: 60%;
+			height: 1em;
+			left: 20%;
+			top: 0;
+			border-radius: 0 0 0.5em 0.5em
+		}
+	}
+
+	@media (prefers-reduced-motion) {
+		.chat {
+			scroll-behavior: auto;
+		}
 	}
 </style>
